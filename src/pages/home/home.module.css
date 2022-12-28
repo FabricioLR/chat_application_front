@@ -1,0 +1,36 @@
+#main{
+    display: flex;
+    width: 100%;
+    height: calc(100vh - 60px)
+}
+
+#contacts{
+    width: 300px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-right: 1px solid rgb(156, 156, 156);
+}
+
+#searchAdd{
+    width: 95%;
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#searchAdd input{
+    padding: 3px;
+    width: 170px;
+}
+#searchAdd input:focus{
+    outline: none;
+}
+#searchAdd svg{
+    font-size: 23px;
+}
+#searchAdd svg:hover{
+    cursor: pointer;
+}
