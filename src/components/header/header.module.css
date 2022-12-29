@@ -5,6 +5,7 @@
     justify-content: center;
     align-items: center;
     background-color: rgb(229, 229, 229);
+    border-right: 1px solid rgb(156, 156, 156);
 }
 
 #header{

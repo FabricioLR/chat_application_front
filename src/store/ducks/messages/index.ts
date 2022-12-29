@@ -26,7 +26,11 @@ const reducer: Reducer<MessagesState> = (state = INITIAL_STATE, action) => {
             const filtred = state.data.filter(message => message.contactId == action.payload.contactId)
             return { ...state, chat: filtred }
         case MessagesTypes.MESSAGE_REQUEST:
-            return { ...state, chat: [...state.chat, action.payload.message], data: [...state.data, action.payload.message] }
+            if (action.payload.message.already){
+                return { ...state, chat: [...state.chat, action.payload.message] }
+            } else {
+                return { ...state, chat: [...state.chat, action.payload.message], data: [...state.data, action.payload.message] }
+            }
         default:
             return state
     }

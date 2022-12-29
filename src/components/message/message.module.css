@@ -8,7 +8,8 @@
     position: relative;
 }
 .message p{
-    margin: 4px 8px 4px 8px;
+    margin: 8px 12px 8px 12px;
+    font-size: 17px;
 }
 
 #owner{

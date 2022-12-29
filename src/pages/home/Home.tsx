@@ -13,12 +13,14 @@ import styleMenu from "../../components/addContact/addContact.module.css"
 import { MessagesTypes } from "../../store/ducks/messages/types"
 import Message from "../../components/message/Message"
 import { io } from "socket.io-client"
+import ProfileImage from "../../../images/profile.png"
 
 const socket = io("https://chatapplication.onrender.com")
 
 type ContactData = {
     contactId: string
     name: string
+    profile_image: string
 }
 
 function Home(){
@@ -44,7 +46,7 @@ function Home(){
 
     useEffect(() => {
         socket.on("contact message", (message) => {
-            dispatch({ type: MessagesTypes.MESSAGE_REQUEST, payload: { message }})
+            dispatch({ type: MessagesTypes.MESSAGE_REQUEST, payload: { message, already: false }})
         })
     }, [socket])
 
@@ -54,51 +56,70 @@ function Home(){
         }
     })
     
-
     function open(){
         document.getElementById(styleMenu.local)?.classList.toggle(styleMenu.activeMenu)
     }
 
     function sendMessage(){
         if (message != "" && currentContact?.contactId != ""){
-            dispatch({ type: MessagesTypes.MESSAGE_REQUEST, payload: { message: { message, fromId: user?.id, contactId: currentContact?.contactId } }})
-
+            document.getElementById(style.messages)?.scrollTo(0, document.getElementById(style.messages)!.scrollHeight + 1000)
+            dispatch({ type: MessagesTypes.MESSAGE_REQUEST, payload: { message: { message, fromId: user?.id, contactId: currentContact?.contactId, already: true } }})
             socket.emit("message", { message, to: currentContact?.name, fromId: user?.id, contactId: currentContact?.contactId })
             dispatch({ type: MessagesTypes.ADD_REQUEST, payload: { message, contactId: currentContact?.contactId } })
             setMessage("")
         }
     }
 
-    console.log(State.messages)
+    console.log(State)
 
     return(
         <>
             {
-                user ? 
+                user ?
                     <>
-                        <Header/>
-                        <AddContact/>
-                        <main id={style.main}>
+                    <div id={style.content}>
+                        <div id={style.left}>
+                            <Header/>
                             <div id={style.contacts}>
                                 <div id={style.searchAdd}>
-                                    <input type="text" placeholder="Contact Name"/>
+                                    <input type="text" placeholder="Contact Name" onChange={(e) => { 
+                                        dispatch({ type: ContactsTypes.FILTER_REQUEST, payload: { name: e.target.value, userId: user.id }})
+                                    }}/>
                                     <AiOutlineUserAdd onClick={open}/>
                                 </div>
                                 {
-                                    State.contacts.data.map(contact => <Contact contact={contact} setCurrentContact={setCurrentContact}/>)
+                                    State.contacts.search[0] ?
+                                        State.contacts.search.map(contact => <Contact contact={contact} setCurrentContact={setCurrentContact}/>)
+                                    :
+                                        <></>
                                 }
                             </div>
+                        </div>
+                        <AddContact/>
+                        <main id={style.main}>
                             <div id={style.chat}>
                                 {
                                     currentContact != undefined ?
                                         <>
+                                            <div id={style.contactHeader}>
+                                                <div id={style.contactLocal}>
+                                                    <p>{currentContact.name}</p>
+                                                    <div id={style.contactImage}>
+                                                        <img src={currentContact.profile_image} onError={(e) => e.currentTarget.src = ProfileImage}/>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div id={style.messages}>
                                                 {
                                                     State.messages.chat.map(message => <Message message={message}></Message>)
                                                 }
                                             </div>
                                             <div id={style.sendMessage}>
-                                                <input type="text" value={message} onChange={(e) => setMessage(e.target.value)}/>
+                                                <input type="text" value={message} onChange={(e) => setMessage(e.target.value)} onKeyUp={(key) => {
+                                                    if (key.key == "Enter"){
+                                                        sendMessage()
+                                                    }
+                                                }}/>
                                                 <button onClick={sendMessage}>send</button>
                                             </div>
                                         </>
@@ -107,6 +128,7 @@ function Home(){
                                 }
                             </div>
                         </main>
+                    </div>
                     </>
                 :
                     <></>

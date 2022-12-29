@@ -19,17 +19,18 @@ function Contact(props: ContactProps){
         <div className={style.contact} onClick={() => {
                 props.setCurrentContact({
                     contactId: props.contact.id,
-                    name: user?.id == props.contact.user1.id ? props.contact.user2.name : props.contact.user1.name
+                    name: user?.id == props.contact.user1.id ? props.contact.user2.name : props.contact.user1.name,
+                    profile_image: user?.id == props.contact.user1.id ? props.contact.user2.profile_image : props.contact.user1.profile_image
                 })
                 dispatch({ type: MessagesTypes.FILTER_REQUEST, payload: { contactId: props.contact.id }})
             }}>
             <div className={style.contactImage}>
                 <img src={
                     user?.id == props.contact.user1.id ?
-                        props.contact.user2.profile_image == "" ? ProfileImage : props.contact.user2.profile_image
+                        props.contact.user2.profile_image
                     :
-                        props.contact.user1.profile_image == "" ? ProfileImage : props.contact.user1.profile_image
-                } alt="" />
+                        props.contact.user1.profile_image
+                } onError={(e) => e.currentTarget.src = ProfileImage} />
             </div>
             <div className={style.contactName}>
                 <p>{user?.id == props.contact.user1.id ? props.contact.user2.name : props.contact.user1.name}</p>

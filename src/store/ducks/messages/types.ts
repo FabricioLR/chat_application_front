@@ -19,6 +19,7 @@ export type AddMessagePayload = {
 
 export type MessagePayload = {
     message: Omit<Message, "id"|"toId"|"to"|"from">
+    already: boolean
 }
 
 export type Message = {

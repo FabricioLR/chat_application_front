@@ -6,11 +6,18 @@ export enum ContactsTypes{
     "ADD_REQUEST" = "@Contacts/ADD_REQUEST",
     "ADD_SUCCESS" = "@Contacts/ADD_SUCCESS",
     "ADD_FAILURE" = "@Contacts/ADD_FAILURE",
+
+    "FILTER_REQUEST" = "@Contacts/FILTER_REQUEST",
 }
 
 export type AddContactPayload = {
     name: string
     setLoad: Function
+}
+
+export type FilterPayload = {
+    name: string
+    userId: string
 }
 
 export type Contact = {
@@ -31,6 +38,7 @@ export type Contact = {
 
 export interface ContactsState{
     readonly data: Contact[]
+    readonly search: Contact[]
     readonly loading: boolean
     readonly error: boolean
 }

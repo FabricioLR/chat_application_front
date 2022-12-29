@@ -17,7 +17,7 @@ function Profile(){
         <div>
             <div>
                 <div>
-                    <img src={user?.profile_image == "" ? ProfileImage : user?.profile_image } alt="" />
+                    <img src={user?.profile_image} onError={(e) => e.currentTarget.src = ProfileImage} />
                 </div>
                 <div>
                     <p>{user?.name}</p>
