@@ -1,15 +1,19 @@
 import { call, put } from "@redux-saga/core/effects";
 import api from "../../../context/api";
 import { loadFailure, loadSuccess, addRequest, addSuccess, addFailure} from "./actions";
-import { AddContactPayload, Message } from "./types"
+import { AddMessagePayload, Message } from "./types"
 
 type ResponseData = {
-    data:  Message
+    data: {
+        messages: Message[]
+    }
     
 }
 
 type ResponseDataAdd = {
-    data: Message
+    data: {
+        message: Message
+    }
 }
 
 async function getMessages(){
@@ -20,9 +24,10 @@ async function getMessages(){
     })
 }
 
-async function addMessage(payload: AddContactPayload){
-    return await api.post("/AddContact", {
+async function addMessage(payload: AddMessagePayload){
+    return await api.post("/SaveMessage", {
         contactId: payload.contactId,
+        message: payload.message,
     }, {
         headers: {
             token: sessionStorage.getItem("token")
@@ -34,7 +39,7 @@ export function* GetMessages(){
     try {
         const response: ResponseData = yield call(getMessages)
 
-        yield put(loadSuccess(response.data))
+        yield put(loadSuccess(response.data.messages))
     } catch (error: any) {
         alert(error.response.data.error)
         yield put(loadFailure())
@@ -42,12 +47,12 @@ export function* GetMessages(){
 }
 
 export function* AddMessage({ payload }: ReturnType<typeof addRequest>){
-    const { contactId } = payload as any
+    const { contactId, message } = payload as any
 
     try {
-        const response: ResponseDataAdd = yield call(addMessage, { contactId })
+        const response: ResponseDataAdd = yield call(addMessage, { contactId, message })
 
-        yield put(addSuccess(response.data))
+        yield put(addSuccess(response.data.message))
     } catch (error: any) {
         alert(error.response.data.error)
         yield put(addFailure())

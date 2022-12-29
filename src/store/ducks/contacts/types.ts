@@ -15,14 +15,14 @@ export type AddContactPayload = {
 
 export type Contact = {
     id: string
-    userId: string
-    contactId: string
-    user: {
+    user1Id: string
+    user2Id: string
+    user1: {
         id: string
         name: string
         profile_image: string
     }
-    contact: {
+    user2: {
         id: string
         name: string
         profile_image: string

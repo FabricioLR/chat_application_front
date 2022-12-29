@@ -6,49 +6,38 @@ export enum MessagesTypes{
     "ADD_REQUEST" = "@Messages/ADD_REQUEST",
     "ADD_SUCCESS" = "@Messages/ADD_SUCCESS",
     "ADD_FAILURE" = "@Messages/ADD_FAILURE",
+
+    "FILTER_REQUEST" = "@Messages/FILTER_REQUEST",
+    /* "ADD_SUCCESS" = "@Messages/ADD_SUCCESS",
+    "ADD_FAILURE" = "@Messages/ADD_FAILURE", */
 }
 
-export type AddContactPayload = {
+export type AddMessagePayload = {
     contactId: string
+    message: string
 }
 
 export type Message = {
-    myMessages: {
+    id: string
+    fromId: string
+    toId: string
+    message: string
+    contactId: string
+    to: {
         id: string
-        fromId: string
-        toId: string
-        message: string
-        to: {
-            id: string
-            name: string
-            profile_image: string
-        }
-        from: {
-            id: string
-            name: string
-            profile_image: string
-        }
-    }[]
-    messagesForMe: {
+        name: string
+        profile_image: string
+    }
+    from: {
         id: string
-        fromId: string
-        toId: string
-        message: string
-        to: {
-            id: string
-            name: string
-            profile_image: string
-        }
-        from: {
-            id: string
-            name: string
-            profile_image: string
-        }
-    }[]
+        name: string
+        profile_image: string
+    }
 }
 
 export interface MessagesState{
-    readonly data: Message | null
+    readonly data: Message[]
+    readonly chat: Message[]
     readonly loading: boolean
     readonly error: boolean
 }

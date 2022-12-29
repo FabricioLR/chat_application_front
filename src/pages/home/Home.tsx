@@ -14,7 +14,8 @@ import { MessagesTypes } from "../../store/ducks/messages/types"
 
 function Home(){
     const { user, VerifyToken } = useContext(AuthContex)
-    const [currentContact, setCurrentContact] = useState("")
+    const [currentContactId, setCurrentContactId] = useState("")
+    const [message, setMessage] = useState("")
     const State = useSelector(state => state) as ApplicationState
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -35,6 +36,12 @@ function Home(){
         document.getElementById(styleMenu.local)?.classList.toggle(styleMenu.activeMenu)
     }
 
+    function sendMessage(){
+        if (message != "" && currentContactId != ""){
+            dispatch({ type: MessagesTypes.ADD_REQUEST, payload: { message, contactId: currentContactId } })
+        }
+    }
+
     console.log(State)
 
     return(
@@ -51,11 +58,26 @@ function Home(){
                                     <AiOutlineUserAdd onClick={addContact}/>
                                 </div>
                                 {
-                                    State.contacts.data.map(contact => <Contact contact={contact}/>)
+                                    State.contacts.data.map(contact => <Contact contact={contact} setCurrentContactId={setCurrentContactId}/>)
                                 }
                             </div>
-                            <div>
-
+                            <div id={style.chat}>
+                                {
+                                    currentContactId != "" ?
+                                        <>
+                                            <div id={style.messages}>
+                                                {
+                                                    State.messages.chat.map(message => <div>{message.message}</div>)
+                                                }
+                                            </div>
+                                            <div id={style.sendMessage}>
+                                                <input type="text" onChange={(e) => setMessage(e.target.value)}/>
+                                                <button onClick={sendMessage}>send</button>
+                                            </div>
+                                        </>
+                                    :
+                                        <></>
+                                }
                             </div>
                         </main>
                     </>
