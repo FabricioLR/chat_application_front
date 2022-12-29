@@ -8,13 +8,17 @@ export enum MessagesTypes{
     "ADD_FAILURE" = "@Messages/ADD_FAILURE",
 
     "FILTER_REQUEST" = "@Messages/FILTER_REQUEST",
-    /* "ADD_SUCCESS" = "@Messages/ADD_SUCCESS",
-    "ADD_FAILURE" = "@Messages/ADD_FAILURE", */
+
+    "MESSAGE_REQUEST" = "@Messages/MESSAGE_REQUEST",
 }
 
 export type AddMessagePayload = {
     contactId: string
     message: string
+}
+
+export type MessagePayload = {
+    message: Omit<Message, "id"|"toId"|"to"|"from">
 }
 
 export type Message = {
@@ -37,7 +41,7 @@ export type Message = {
 
 export interface MessagesState{
     readonly data: Message[]
-    readonly chat: Message[]
+    readonly chat: Omit<Message, "id"|"toId"|"contactId"|"to"|"from">[]
     readonly loading: boolean
     readonly error: boolean
 }

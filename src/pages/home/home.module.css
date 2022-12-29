@@ -52,7 +52,8 @@
     justify-content: space-between;
     align-items: center;
     position: absolute;
-    top: calc(100% - 40px)
+    top: calc(100% - 50px);
+    margin-bottom: 10px;
 }
 #sendMessage *:nth-child(1){
     margin-left: 40px;
@@ -66,4 +67,7 @@
 }
 #sendMessage *:nth-child(1):focus{
     outline: none;
+}
+#sendMessage *:nth-child(2):hover{
+    cursor: pointer;
 }

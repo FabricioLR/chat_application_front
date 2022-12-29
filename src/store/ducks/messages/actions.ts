@@ -1,5 +1,5 @@
 import { action } from "typesafe-actions";
-import { AddMessagePayload, Message, MessagesTypes } from "./types"
+import { AddMessagePayload, Message, MessagePayload, MessagesTypes } from "./types"
 
 export const loadRequest = () => action(MessagesTypes.LOAD_REQUEST)
 export const loadSuccess = (data: Message[]) => action(MessagesTypes.LOAD_SUCCESS, { data })
@@ -10,3 +10,5 @@ export const addSuccess = (data: Message) => action(MessagesTypes.ADD_SUCCESS, {
 export const addFailure = () => action(MessagesTypes.ADD_FAILURE)
 
 export const filterRequest = (payload: Omit<AddMessagePayload, "message">) => action(MessagesTypes.FILTER_REQUEST, { payload })
+
+export const messageRequest = (payload: MessagePayload) => action(MessagesTypes.MESSAGE_REQUEST, { payload })

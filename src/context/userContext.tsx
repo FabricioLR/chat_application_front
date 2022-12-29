@@ -110,7 +110,7 @@ function AuthProvider(props: AuthProviderProps){
                 })
             }
 
-            return response.status
+            return { status: response.status, name: response.data.user.name}
         } catch(error) {
             console.log(error)
         }

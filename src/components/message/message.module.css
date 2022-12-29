@@ -1,0 +1,21 @@
+.message{
+    width: 240px;
+    background-color: rgb(202, 202, 202);
+    border-radius: 1px 5px 3px 5px;
+    margin: 10px 10px 0px 10px;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+.message p{
+    margin: 4px 8px 4px 8px;
+}
+
+#owner{
+    left: calc(100% - 263px);
+    justify-content: flex-end;
+    border-radius: 5px 1px 3px 5px;
+}
+.message:hover{
+    cursor: default;
+}

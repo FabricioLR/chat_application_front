@@ -4,7 +4,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgb(204, 204, 204);
+    background-color: rgb(229, 229, 229);
 }
 
 #header{
@@ -19,7 +19,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgb(156, 156, 156);
+    background-color: rgb(202, 202, 202);
 }
 #logo img{
     width: 100%;
@@ -33,7 +33,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgb(156, 156, 156);
+    background-color: rgb(202, 202, 202);
 }
 
 #profile img{

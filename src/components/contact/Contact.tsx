@@ -8,7 +8,7 @@ import { MessagesTypes } from "../../store/ducks/messages/types"
 
 type ContactProps = {
     contact: contact
-    setCurrentContactId: Function
+    setCurrentContact: Function
 }
 
 function Contact(props: ContactProps){
@@ -17,7 +17,10 @@ function Contact(props: ContactProps){
 
     return(
         <div className={style.contact} onClick={() => {
-                props.setCurrentContactId(props.contact.id)
+                props.setCurrentContact({
+                    contactId: props.contact.id,
+                    name: user?.id == props.contact.user1.id ? props.contact.user2.name : props.contact.user1.name
+                })
                 dispatch({ type: MessagesTypes.FILTER_REQUEST, payload: { contactId: props.contact.id }})
             }}>
             <div className={style.contactImage}>

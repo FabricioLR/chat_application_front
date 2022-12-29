@@ -22,8 +22,6 @@ function AddContact(){
         }
     }
 
-    console.log(load)
-
     return(
         <div id={style.local}>
             <form onSubmit={(e) => {e.preventDefault(); add()}} id={style.form}>

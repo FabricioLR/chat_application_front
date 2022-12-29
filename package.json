@@ -18,6 +18,7 @@
     "react-router-dom": "^6.6.1",
     "redux": "^4.2.0",
     "redux-saga": "^1.2.2",
+    "socket.io-client": "^4.5.4",
     "typesafe-actions": "^5.1.0"
   },
   "devDependencies": {
