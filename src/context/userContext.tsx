@@ -113,6 +113,7 @@ function AuthProvider(props: AuthProviderProps){
             return { status: response.status, name: response.data.user.name}
         } catch(error) {
             console.log(error)
+            return { status: 400 }
         }
     }
 

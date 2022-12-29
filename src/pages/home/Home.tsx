@@ -14,7 +14,7 @@ import { MessagesTypes } from "../../store/ducks/messages/types"
 import Message from "../../components/message/Message"
 import { io } from "socket.io-client"
 
-const socket = io("http://localhost:4000")
+const socket = io("https://chatapplication.onrender.com")
 
 type ContactData = {
     contactId: string
