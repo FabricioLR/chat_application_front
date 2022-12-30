@@ -12,6 +12,12 @@ export enum MessagesTypes{
     "MESSAGE_REQUEST" = "@Messages/MESSAGE_REQUEST",
 }
 
+export type Payload = {
+    contactId: string
+    message: Omit<Message, "id"|"toId"|"to"|"from"> | string
+    already: boolean
+}
+
 export type AddMessagePayload = {
     contactId: string
     message: string

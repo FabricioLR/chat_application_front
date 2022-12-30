@@ -6,14 +6,9 @@ import { AddMessagePayload, Message } from "./types"
 type ResponseData = {
     data: {
         messages: Message[]
-    }
-    
-}
-
-type ResponseDataAdd = {
-    data: {
         message: Message
     }
+    
 }
 
 async function getMessages(){
@@ -50,7 +45,7 @@ export function* AddMessage({ payload }: ReturnType<typeof addRequest>){
     const { contactId, message } = payload as any
 
     try {
-        const response: ResponseDataAdd = yield call(addMessage, { contactId, message })
+        const response: ResponseData = yield call(addMessage, { contactId, message })
 
         yield put(addSuccess(response.data.message))
     } catch (error: any) {

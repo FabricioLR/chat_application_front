@@ -20,29 +20,13 @@ type AuthProviderProps = {
     children: ReactNode
 }
 
-type RegisterData = {
+type Props = {
     email: string
     name: string
     password: string
     navigate: Function
-}
-
-type AuthenticateData = {
-    email: string
-    password: string
-    navigate: Function
-}
-
-type AuthResponseData = {
     token: string
-    user: {
-        name: string
-        profile_image: string
-        id: string
-    }
-}
-
-type ChangeProfileImageData = {
+    user: User
     file: File
 }
 
@@ -51,9 +35,9 @@ export const AuthContex = createContext({} as AuthContextData)
 function AuthProvider(props: AuthProviderProps){
     const [ user, setUser ] = useState<User | null>(null)
 
-    async function Register(data: RegisterData){
+    async function Register(data: Omit<Props, "token"|"user"|"file">){
         try {
-            const response = await api.post<AuthResponseData>("Register", data)
+            const response = await api.post<Pick<Props, "token"|"user">>("Register", data)
 
             if (response.status == 200){
                 setUser({
@@ -65,13 +49,14 @@ function AuthProvider(props: AuthProviderProps){
                 data.navigate("/")
             }
         } catch (error: any) {
+            console.log(error.response.data.error)
             alert(error.response.data.error)
         }
     }
 
-    async function Authenticate(data: AuthenticateData){
+    async function Authenticate(data: Omit<Props, "token"|"user"|"name"|"file">){
         try {
-            const response = await api.post<AuthResponseData>("Authenticate", data)
+            const response = await api.post<Pick<Props, "token"|"user">>("Authenticate", data)
 
             if (response.status == 200){
                 setUser({
@@ -83,7 +68,6 @@ function AuthProvider(props: AuthProviderProps){
                 data.navigate("/")
             }
         } catch (error: any) {
-            console.log(error.response.data)
             alert(error.response.data.error)
         }
     }
@@ -96,7 +80,7 @@ function AuthProvider(props: AuthProviderProps){
 
     async function VerifyToken(){
         try {
-            const response = await api.get<Omit<AuthResponseData, "token">>("AuthenticateByToken", {
+            const response = await api.get<Pick<Props, "user">>("AuthenticateByToken", {
                 headers: {
                     token: sessionStorage.getItem("token")
                 }
@@ -112,21 +96,21 @@ function AuthProvider(props: AuthProviderProps){
 
             return { status: response.status, name: response.data.user.name}
         } catch(error) {
-            console.log(error)
             return { status: 400 }
         }
     }
 
-    async function ChangeProfileImage(data: ChangeProfileImageData){
+    async function ChangeProfileImage(data: Omit<Props, "token"|"user"|"name"|"navigate"|"email"|"password">){
         const formData = new FormData()
         formData.append("file", data.file)
         
         try {
-            const response = await api.post<Omit<AuthResponseData, "token">>("ChangeUserImage", formData, {
+            const response = await api.post<Pick<Props, "user">>("ChangeUserImage", formData, {
                 headers: {
                     token: sessionStorage.getItem("token")
                 }
             })
+
             if (response.status == 200){
                 setUser({
                     name: response.data.user.name,
@@ -134,8 +118,8 @@ function AuthProvider(props: AuthProviderProps){
                     id: response.data.user.id,
                 })
             }
-        } catch (error) {
-            console.log(error)
+        } catch (error: any) {
+            alert(error.response.data.message)
         }
     }
 

@@ -10,13 +10,9 @@ export enum ContactsTypes{
     "FILTER_REQUEST" = "@Contacts/FILTER_REQUEST",
 }
 
-export type AddContactPayload = {
+export type Payload = {
     name: string
     setLoad: Function
-}
-
-export type FilterPayload = {
-    name: string
     userId: string
 }
 

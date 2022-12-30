@@ -15,7 +15,7 @@ function Header(){
                     <img src="" alt="" />
                 </div>
                 <div id={style.profile} onClick={() => navigate("/profile")}>
-                    <img src={ user?.profile_image == "" ? ProfileImage : user?.profile_image} alt="" />
+                    <img src={ user?.profile_image } onError={(e) => e.currentTarget.src = ProfileImage} />
                 </div>
             </div>
         </header>

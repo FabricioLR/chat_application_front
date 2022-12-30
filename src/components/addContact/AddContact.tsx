@@ -4,7 +4,6 @@ import { useDispatch } from "react-redux"
 import { ContactsTypes } from "../../store/ducks/contacts/types"
 import { useState } from "react"
 
-
 function AddContact(){
     const dispatch = useDispatch()
     const [name, setName] = useState("")

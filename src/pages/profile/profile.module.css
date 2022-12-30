@@ -1,0 +1,111 @@
+#local{
+    display: flex;
+    width: 100%;
+    height: 100vh;
+}
+
+#owner{
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#ownerImage{
+    width: 200px;
+    height: 200px;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+    background-color: rgb(202, 202, 202);
+}
+
+#ownerImage img{
+    width: 100%;
+    height: 100%;
+    border-radius: 100%;
+}
+
+#ownerName{
+    margin-top: 15px;
+    font-size: 20px;
+    cursor: default;
+}
+
+#edit{
+    margin-left: 50px;
+    margin-top: 30px;
+    display: flex;
+}
+
+#form p{
+    font-size: 17px;
+    cursor: default;
+}
+#form > div:nth-child(1) input{
+    margin-bottom: 10px;
+    margin-top: 5px;
+    margin-left: 5px;
+    outline: none;
+    padding-left: 3px;
+}
+
+#form > div:nth-child(2) input{
+    margin-bottom: 10px;
+    margin-top: 5px;
+    margin-left: 5px;
+    outline: none;
+    height: 20px;
+    width: 200px;
+    padding-left: 3px;
+}
+#form > div:nth-child(3) input{
+    margin-bottom: 10px;
+    margin-top: 5px;
+    margin-left: 5px;
+    outline: none;
+    height: 20px;
+    width: 200px;
+    padding-left: 3px;
+}
+
+#form2{
+    margin-left: 10px;
+}
+#form2 p{
+    font-size: 17px;
+    cursor: default;
+}
+
+#form2 > div input{
+    margin-bottom: 10px;
+    margin-top: 5px;
+    margin-left: 5px;
+    outline: none;
+    height: 20px;
+    width: 200px;
+    padding-left: 3px;
+}
+
+#form2 > input{
+    width: 100px;
+    height: 25px;
+    cursor: pointer;
+}
+#form > input{
+    width: 100px;
+    height: 25px;
+    cursor: pointer;
+}
+
+#exit{
+    margin-top: 30px;
+    margin-left: 30px;
+}
+#exit button{
+    width: 100px;
+    height: 25px;
+    cursor: pointer;
+}

@@ -1,10 +1,10 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext } from "react"
 import { AuthContex } from "../../context/userContext"
 import { Message as message } from "../../store/ducks/messages/types"
 import style from "./message.module.css"
 
 type MessageProps = {
-    message: Omit<message, "id"|"toId"|"contactId"|"to"|"from">
+    message: Pick<message, "fromId"|"message">
 }
 
 function Message(props: MessageProps) {

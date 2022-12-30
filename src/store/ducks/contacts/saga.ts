@@ -1,16 +1,11 @@
 import { call, put } from "@redux-saga/core/effects";
 import api from "../../../context/api";
 import { loadFailure, loadSuccess, addRequest, addSuccess, addFailure} from "./actions";
-import { AddContactPayload, Contact } from "./types"
+import { Contact, Payload } from "./types"
 
 type ResponseData = {
     data: {
-        contacts: Contact[]
-    }
-}
-
-type ResponseDataAdd = {
-    data: {
+        contacts: Contact[],
         contact: Contact
     }
 }
@@ -23,7 +18,7 @@ async function getContacts(){
     })
 }
 
-async function addContact(payload: Omit<AddContactPayload, "setLoad">){
+async function addContact(payload: Omit<Payload, "setLoad"|"userId">){
     return await api.post("/AddContact", {
         name: payload.name,
     }, {
@@ -48,7 +43,7 @@ export function* AddContact({ payload }: ReturnType<typeof addRequest>){
     const { name, setLoad } = payload as any
 
     try {
-        const response: ResponseDataAdd = yield call(addContact, { name })
+        const response: Omit<ResponseData, ""> = yield call(addContact, { name })
 
         setLoad("Add")
 
