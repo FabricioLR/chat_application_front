@@ -14,6 +14,7 @@ type AuthContextData = {
     SignOut: Function
     ChangeProfileImage: Function
     VerifyToken: Function
+    ChangeUserCredentials: Function
 }
 
 type AuthProviderProps = {
@@ -123,8 +124,31 @@ function AuthProvider(props: AuthProviderProps){
         }
     }
 
+    async function ChangeUserCredentials(data: Pick<Props, "name"|"password">){
+        try {
+            const response = await api.post<Pick<Props, "user">>("ChangeUserCredentials", {
+                name: data.name,
+                password: data.password
+            }, {
+                headers: {
+                    token: sessionStorage.getItem("token")
+                }
+            })
+
+            if (response.status == 200){
+                setUser({
+                    name: response.data.user.name,
+                    profile_image: response.data.user.profile_image,
+                    id: response.data.user.id,
+                })
+            }
+        } catch (error: any) {
+            alert(error.response.data.message)
+        }
+    }
+
     return (
-        <AuthContex.Provider value={{ user, Register, Authenticate, SignOut, ChangeProfileImage, VerifyToken }}>
+        <AuthContex.Provider value={{ user, ChangeUserCredentials, Register, Authenticate, SignOut, ChangeProfileImage, VerifyToken }}>
             {props.children}
         </AuthContex.Provider>
     )

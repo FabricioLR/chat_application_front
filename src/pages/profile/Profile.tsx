@@ -5,16 +5,19 @@ import ProfileImage from "../../../images/profile.png"
 import style from "./profile.module.css"
 
 function Profile(){
-    const { user, SignOut, ChangeProfileImage } = useContext(AuthContex)
+    const { user, SignOut, ChangeProfileImage, ChangeUserCredentials } = useContext(AuthContex)
     const [imageLoad, setImageLoad] = useState("Upload")
+    const [credentialsLoad, setCredentialsLoad] = useState("Save")
+    const [password, setPassword] = useState("")
+    const [name, setName] = useState("")
     const [file, setFile] = useState(null)
 
     const navigate = useNavigate()
 
     useEffect(() => {
-        /* if (!user){
+        if (!user){
             navigate("/signin")
-        } */
+        }
     }, [])
 
     async function changeProfileImage() {
@@ -23,6 +26,16 @@ function Profile(){
             file
         })
         setImageLoad("Upload")
+    }
+
+    async function changeUserCredentials(){
+        setCredentialsLoad("Saving...")
+        await ChangeUserCredentials({
+            password, name
+        })
+        setCredentialsLoad("Save")
+        setPassword("")
+        setName("")
     }
 
     return(
@@ -43,16 +56,16 @@ function Profile(){
                     </div>
                     <input type="submit" value={imageLoad} disabled={imageLoad == "Uploading..." ? true : false}/>
                 </form>
-                <form id={style.form2} onSubmit={(e) => {e.preventDefault();}}>
+                <form id={style.form2} onSubmit={(e) => {e.preventDefault(); changeUserCredentials()}}>
                     <div>
                         <p>Change Name</p>
-                        <input type="text" required />
+                        <input type="text" value={name} onChange={(e) => setName(e.target.value)}/>
                     </div>
                     <div>
                         <p>Change Password</p>
-                        <input type="text" required />
+                        <input type="text" value={password} onChange={(e) => setPassword(e.target.value)}/>
                     </div>
-                    <input type="submit" value="Save" />
+                    <input type="submit" value={credentialsLoad} disabled={credentialsLoad == "Saving..." ? true : false}/>
                 </form>
             </div>
             <div id={style.exit}>
