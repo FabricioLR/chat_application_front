@@ -1,6 +1,6 @@
 # chat application front
 
-Site Url: https://glittering-scone-b55660.netlify.app/signin
+Site Url: https://glittering-scone-b55660.netlify.app
 
 <p>Home page</p>
 <div>
