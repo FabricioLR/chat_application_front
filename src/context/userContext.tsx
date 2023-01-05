@@ -1,7 +1,8 @@
 import { createContext, ReactNode, useState } from "react"
+import socket from "../components/socket/socket"
 import api from "./api"
 
-type User = {
+export type User = {
     name: string
     profile_image: string
     id: string
@@ -74,6 +75,7 @@ function AuthProvider(props: AuthProviderProps){
     }
 
     function SignOut(navigate: Function){
+        socket.disconnect()
         setUser(null)
         sessionStorage.removeItem("token")
         navigate("/signin")

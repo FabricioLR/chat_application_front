@@ -42,7 +42,6 @@ const reducer: Reducer<ContactsState> = (state = INITIAL_STATE, action) => {
             } else {
                 return { ...state, loading: false, error: false, search: [] }
             }
-            
         default:
             return state
     }

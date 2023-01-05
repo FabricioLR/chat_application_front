@@ -12,21 +12,21 @@ import AddContact from "../../components/addContact/AddContact"
 import styleMenu from "../../components/addContact/addContact.module.css"
 import { MessagesTypes } from "../../store/ducks/messages/types"
 import Message from "../../components/message/Message"
-import { io } from "socket.io-client"
 import ProfileImage from "../../../images/profile.png"
-
-const socket = io("https://chatapplication.onrender.com")
+import socket from "../../components/socket/socket"
 
 type ContactData = {
     contactId: string
     name: string
     profile_image: string
+    online: boolean
 }
 
 function Home(){
     const { user, VerifyToken } = useContext(AuthContex)
-    const [currentContact, setCurrentContact] = useState<ContactData>()
+    const [currentContact, setCurrentContact] = useState<Partial<ContactData>>({})
     const [message, setMessage] = useState("")
+    const [onlines, setOnlines] = useState<Object>({})
     const State = useSelector(state => state) as ApplicationState
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -48,13 +48,26 @@ function Home(){
         socket.on("contact message", (message) => {
             dispatch({ type: MessagesTypes.MESSAGE_REQUEST, payload: { message, already: false }})
         })
+        socket.on("onlines", (contacts) => {
+            setOnlines(contacts)
+        })
     }, [socket])
 
     useEffect(() => {
-        window.onunload = () => {
-            socket.disconnect()
+        const interval = setInterval(() => {
+            if (currentContact.name){
+                if (currentContact.name in onlines){
+                    setCurrentContact({...currentContact, online: true})
+                } else {
+                    setCurrentContact({...currentContact, online: false})
+                }
+            }
+        }, 3000)
+
+        return () => {
+            clearInterval(interval)
         }
-    })
+    }, [onlines, currentContact])
     
     function open(){
         document.getElementById(styleMenu.local)?.classList.toggle(styleMenu.activeMenu)
@@ -70,7 +83,7 @@ function Home(){
         }
     }
 
-    console.log(State)
+    //console.log(currentContact)
 
     return(
         <>
@@ -99,11 +112,15 @@ function Home(){
                         <main id={style.main}>
                             <div id={style.chat}>
                                 {
-                                    currentContact != undefined ?
+                                    currentContact.contactId ?
                                         <>
                                             <div id={style.contactHeader}>
                                                 <div id={style.contactLocal}>
-                                                    <p>{currentContact.name}</p>
+                                                    <div id={style.div}>
+                                                        <p>{currentContact.name}</p>
+                                                        <p>{currentContact.online ? "online" : ""}</p>
+                                                    </div>
+                                                    
                                                     <div id={style.contactImage}>
                                                         <img src={currentContact.profile_image} onError={(e) => e.currentTarget.src = ProfileImage}/>
                                                     </div>

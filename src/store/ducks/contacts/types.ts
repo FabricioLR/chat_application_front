@@ -1,3 +1,5 @@
+import { User } from "../../../context/userContext"
+
 export enum ContactsTypes{
     "LOAD_REQUEST" = "@Contacts/LOAD_REQUEST",
     "LOAD_SUCCESS" = "@Contacts/LOAD_SUCCESS",
@@ -14,6 +16,8 @@ export type Payload = {
     name: string
     setLoad: Function
     userId: string
+    profile_image: string
+    id: string
 }
 
 export type Contact = {

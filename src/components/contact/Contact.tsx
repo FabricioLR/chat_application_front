@@ -20,7 +20,8 @@ function Contact(props: ContactProps){
                 props.setCurrentContact({
                     contactId: props.contact.id,
                     name: user?.id == props.contact.user1.id ? props.contact.user2.name : props.contact.user1.name,
-                    profile_image: user?.id == props.contact.user1.id ? props.contact.user2.profile_image : props.contact.user1.profile_image
+                    profile_image: user?.id == props.contact.user1.id ? props.contact.user2.profile_image : props.contact.user1.profile_image,
+                    online: false
                 })
                 dispatch({ type: MessagesTypes.FILTER_REQUEST, payload: { contactId: props.contact.id }})
             }}>
