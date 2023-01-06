@@ -10,3 +10,7 @@ export const addSuccess = (data: Contact) => action(ContactsTypes.ADD_SUCCESS, {
 export const addFailure = () => action(ContactsTypes.ADD_FAILURE)
 
 export const filterRequest = (payload: Pick<Payload, "name"|"userId">) => action(ContactsTypes.FILTER_REQUEST, { payload })
+
+export const setCurrentContact = (payload: Pick<Payload, "name"|"profile_image"|"contactId"|"online">) => action(ContactsTypes.SET_CURRENTCONTACT, { payload })
+
+export const setCurrentContactStatus = (payload: Pick<Payload, "online">) => action(ContactsTypes.SET_CURRENTCONTACT_STATUS, { payload })

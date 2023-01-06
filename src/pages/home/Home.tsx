@@ -45,21 +45,28 @@ function Home(){
     }, [])
 
     useEffect(() => {
-        socket.on("contact message", (message) => {
+        socket.on("server message", (message) => {
             dispatch({ type: MessagesTypes.MESSAGE_REQUEST, payload: { message, already: false }})
+            if (message.contactId == currentContact.contactId){
+                dispatch({ type: MessagesTypes.UPDATE_MESSAGE, payload: { contactId: message.contactId }})
+                socket.emit("updateMessage", { contactId: message.contactId, to: currentContact.name })
+            }
         })
-        socket.on("onlines", (contacts) => {
+        socket.on("server onlines", (contacts) => {
             setOnlines(contacts)
         })
-    }, [socket])
+        socket.on("server updateMessage", (data) => {
+            dispatch({ type: MessagesTypes.UPDATE_MESSAGE_FRONT, payload: { contactId: data.contactId, currentContactId: currentContact.contactId }})
+        })
+    }, [socket, currentContact])
 
     useEffect(() => {
         const interval = setInterval(() => {
             if (currentContact.name){
                 if (currentContact.name in onlines){
-                    setCurrentContact({...currentContact, online: true})
+                    dispatch({ type: ContactsTypes.SET_CURRENTCONTACT_STATUS, payload: { online: true }})
                 } else {
-                    setCurrentContact({...currentContact, online: false})
+                    dispatch({ type: ContactsTypes.SET_CURRENTCONTACT_STATUS, payload: { online: false }})
                 }
             }
         }, 3000)
@@ -68,10 +75,6 @@ function Home(){
             clearInterval(interval)
         }
     }, [onlines, currentContact])
-    
-    function open(){
-        document.getElementById(styleMenu.local)?.classList.toggle(styleMenu.activeMenu)
-    }
 
     function sendMessage(){
         if (message != "" && currentContact?.contactId != ""){
@@ -98,11 +101,11 @@ function Home(){
                                     <input type="text" placeholder="Contact Name" onChange={(e) => { 
                                         dispatch({ type: ContactsTypes.FILTER_REQUEST, payload: { name: e.target.value, userId: user.id }})
                                     }}/>
-                                    <AiOutlineUserAdd onClick={open}/>
+                                    <AiOutlineUserAdd onClick={() => document.getElementById(styleMenu.local)?.classList.toggle(styleMenu.activeMenu)}/>
                                 </div>
                                 {
                                     State.contacts.search[0] ?
-                                        State.contacts.search.map(contact => <Contact contact={contact} setCurrentContact={setCurrentContact}/>)
+                                        State.contacts.search.map(contact => <Contact contact={contact}/>)
                                     :
                                         <></>
                                 }

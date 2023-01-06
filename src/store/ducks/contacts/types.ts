@@ -10,6 +10,9 @@ export enum ContactsTypes{
     "ADD_FAILURE" = "@Contacts/ADD_FAILURE",
 
     "FILTER_REQUEST" = "@Contacts/FILTER_REQUEST",
+
+    "SET_CURRENTCONTACT" = "@Contacts/SET_CURRENTCONTACT",
+    "SET_CURRENTCONTACT_STATUS" = "@Contacts/SET_CURRENTCONTACT_STATUS"
 }
 
 export type Payload = {
@@ -18,6 +21,8 @@ export type Payload = {
     userId: string
     profile_image: string
     id: string
+    contactId: string
+    online: boolean
 }
 
 export type Contact = {
@@ -34,11 +39,13 @@ export type Contact = {
         name: string
         profile_image: string
     }
+    online: boolean
 }
 
 export interface ContactsState{
     readonly data: Contact[]
     readonly search: Contact[]
+    readonly currentContact: Contact | null
     readonly loading: boolean
     readonly error: boolean
 }

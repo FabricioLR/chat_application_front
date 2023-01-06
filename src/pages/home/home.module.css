@@ -133,7 +133,6 @@
 }
 #contactLocal p:nth-child(2){
     font-size: 14px;
-    position: absolute;
     width: 100%;
     text-align: end;
 }

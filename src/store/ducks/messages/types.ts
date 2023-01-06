@@ -10,21 +10,15 @@ export enum MessagesTypes{
     "FILTER_REQUEST" = "@Messages/FILTER_REQUEST",
 
     "MESSAGE_REQUEST" = "@Messages/MESSAGE_REQUEST",
+
+    "UPDATE_MESSAGE" = "@Messages/UPDATE_MESSAGE",
+
+    "UPDATE_MESSAGE_FRONT" = "@Messages/UPDATE_MESSAGE_FRONT",
 }
 
 export type Payload = {
     contactId: string
-    message: Omit<Message, "id"|"toId"|"to"|"from"> | string
-    already: boolean
-}
-
-export type AddMessagePayload = {
-    contactId: string
-    message: string
-}
-
-export type MessagePayload = {
-    message: Omit<Message, "id"|"toId"|"to"|"from">
+    message: Pick<Message, "fromId"|"message"|"contactId"|"viewed"> | string
     already: boolean
 }
 
@@ -34,6 +28,7 @@ export type Message = {
     toId: string
     message: string
     contactId: string
+    viewed: boolean
     to: {
         id: string
         name: string
@@ -48,7 +43,7 @@ export type Message = {
 
 export interface MessagesState{
     readonly data: Message[]
-    readonly chat: Omit<Message, "id"|"toId"|"contactId"|"to"|"from">[]
+    readonly chat: Pick<Message, "fromId"|"message"|"contactId"|"viewed">[]
     readonly loading: boolean
     readonly error: boolean
 }

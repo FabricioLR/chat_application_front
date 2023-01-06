@@ -4,6 +4,7 @@ import { ContactsTypes, ContactsState, Contact} from "./types"
 const INITIAL_STATE: ContactsState = {
     data: [],
     search: [],
+    currentContact: null,
     loading: false,
     error: false,
 }
@@ -42,6 +43,10 @@ const reducer: Reducer<ContactsState> = (state = INITIAL_STATE, action) => {
             } else {
                 return { ...state, loading: false, error: false, search: [] }
             }
+        case ContactsTypes.SET_CURRENTCONTACT:
+            return { ...state, currentContact: action.payload }
+        case ContactsTypes.SET_CURRENTCONTACT_STATUS:
+            return { ...state, currentContact: { ...state.currentContact, online: action.payload.online } }
         default:
             return state
     }

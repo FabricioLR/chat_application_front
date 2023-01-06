@@ -1,7 +1,7 @@
 import { all, takeLatest } from "redux-saga/effects"
 import { AddContact, GetContacts } from "./contacts/saga"
 import { ContactsTypes } from "./contacts/types"
-import { AddMessage, GetMessages } from "./messages/saga"
+import { AddMessage, GetMessages, UpdateMessage } from "./messages/saga"
 import { MessagesTypes } from "./messages/types"
 
 export default function* rootSaga(){
@@ -10,5 +10,6 @@ export default function* rootSaga(){
         takeLatest(ContactsTypes.ADD_REQUEST, AddContact),
         takeLatest(MessagesTypes.LOAD_REQUEST, GetMessages),
         takeLatest(MessagesTypes.ADD_REQUEST, AddMessage),
+        takeLatest(MessagesTypes.UPDATE_MESSAGE, UpdateMessage),
     ])
 }
