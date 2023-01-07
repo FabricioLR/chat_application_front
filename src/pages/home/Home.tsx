@@ -33,7 +33,11 @@ function Home(){
 
     useEffect(() => {
         socket.on("server message", (message) => {
-            dispatch({ type: MessagesTypes.MESSAGE_REQUEST, payload: { message, already: false }})
+            const contactMessages = State.messages.data.filter(msg => msg.contactId == message.contactId)
+            const latestMessage = contactMessages[contactMessages.length - 1]
+            if (latestMessage.message != message.message && latestMessage.createdAt != message.createdAt){
+                dispatch({ type: MessagesTypes.MESSAGE_REQUEST, payload: { message, already: false }})
+            }
             if (message.contactId == State.contacts.currentContact?.contactId){
                 dispatch({ type: MessagesTypes.UPDATE_MESSAGE, payload: { contactId: message.contactId }})
                 dispatch({ type: MessagesTypes.UPDATE_MESSAGE_FRONT, payload: { contactId:  message.contactId }})
@@ -46,9 +50,15 @@ function Home(){
         socket.on("server updateMessageStatus", (data) => {
             dispatch({ type: MessagesTypes.UPDATE_MESSAGE_FRONT, payload: { contactId: data.contactId, currentContactId: State.contacts.currentContact?.contactId }})
         })
-    }, [socket, State.contacts.currentContact])
 
-    console.log(State)
+        return () => {
+            socket.off("server message")
+            socket.off("server onlines")
+            socket.off("server updateMessageStatus")
+        }
+    }, [socket, State.contacts.currentContact, State.messages.data])
+
+    //console.log(State)
 
     return(
         <>

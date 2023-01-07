@@ -20,8 +20,9 @@ function Chat(){
 
     function sendMessage(){
         if (message != "" ){
-            dispatch({ type: MessagesTypes.MESSAGE_REQUEST, payload: { message: { message, fromId: user?.id, contactId: State.contacts.currentContact?.contactId, already: true } }})
-            socket.emit("message", { message, to: State.contacts.currentContact?.name, fromId: user?.id, contactId: State.contacts.currentContact?.contactId })
+            const date = new Date()
+            dispatch({ type: MessagesTypes.MESSAGE_REQUEST, payload: { message: { message, fromId: user?.id, contactId: State.contacts.currentContact?.contactId, already: true, createdAt: date.toString() } }})
+            socket.emit("message", { message, to: State.contacts.currentContact?.name, fromId: user?.id, contactId: State.contacts.currentContact?.contactId, createdAt: date.toString() })
             dispatch({ type: MessagesTypes.ADD_REQUEST, payload: { message, contactId: State.contacts.currentContact?.contactId } })
             setMessage("")
         }

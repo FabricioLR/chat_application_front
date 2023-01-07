@@ -18,7 +18,7 @@ export enum MessagesTypes{
 
 export type Payload = {
     contactId: string
-    message: Pick<Message, "fromId"|"message"|"contactId"|"viewed"> | string
+    message: Pick<Message, "fromId"|"message"|"contactId"|"viewed"|"createdAt"> | string
     already: boolean
 }
 
@@ -29,6 +29,7 @@ export type Message = {
     message: string
     contactId: string
     viewed: boolean
+    createdAt: Date
     to: {
         id: string
         name: string
@@ -43,7 +44,7 @@ export type Message = {
 
 export interface MessagesState{
     readonly data: Message[]
-    readonly chat: Pick<Message, "fromId"|"message"|"contactId"|"viewed">[]
+    readonly chat: Pick<Message, "fromId"|"message"|"contactId"|"viewed"|"createdAt">[]
     readonly loading: boolean
     readonly error: boolean
 }

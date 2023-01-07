@@ -16,8 +16,11 @@ export type ApplicationState = {
 const store: Store = configureStore({
     reducer: rootReducer,
     middleware: (getDefaultMiddleware) => {
-        return getDefaultMiddleware({ thunk: false }).prepend(sagaMiddleware);
-    }
+        return getDefaultMiddleware({
+            thunk: false,
+        }).prepend(sagaMiddleware);
+    },
+    
 })
 
 sagaMiddleware.run(rootSaga)
