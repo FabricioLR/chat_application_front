@@ -1,32 +1,19 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import Header from "../../components/header/Header"
 import { AuthContex } from "../../context/userContext"
 import { useDispatch, useSelector } from "react-redux"
 import { ContactsTypes } from "../../store/ducks/contacts/types"
 import { ApplicationState } from "../../store"
-import Contact from "../../components/contact/Contact"
 import style from "./home.module.css"
-import { AiOutlineUserAdd } from "react-icons/ai"
 import AddContact from "../../components/addContact/AddContact"
-import styleMenu from "../../components/addContact/addContact.module.css"
 import { MessagesTypes } from "../../store/ducks/messages/types"
-import Message from "../../components/message/Message"
-import ProfileImage from "../../../images/profile.png"
 import socket from "../../components/socket/socket"
-
-type ContactData = {
-    contactId: string
-    name: string
-    profile_image: string
-    online: boolean
-}
+import Chat from "../../components/chat/Chat"
+import Contacts from "../../components/contacts/Contacts"
 
 function Home(){
     const { user, VerifyToken } = useContext(AuthContex)
-    const [currentContact, setCurrentContact] = useState<Partial<ContactData>>({})
-    const [message, setMessage] = useState("")
-    const [onlines, setOnlines] = useState<Object>({})
     const State = useSelector(state => state) as ApplicationState
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -47,111 +34,43 @@ function Home(){
     useEffect(() => {
         socket.on("server message", (message) => {
             dispatch({ type: MessagesTypes.MESSAGE_REQUEST, payload: { message, already: false }})
-            if (message.contactId == currentContact.contactId){
+            if (message.contactId == State.contacts.currentContact?.contactId){
                 dispatch({ type: MessagesTypes.UPDATE_MESSAGE, payload: { contactId: message.contactId }})
-                socket.emit("updateMessage", { contactId: message.contactId, to: currentContact.name })
+                dispatch({ type: MessagesTypes.UPDATE_MESSAGE_FRONT, payload: { contactId:  message.contactId }})
+                socket.emit("updateMessageStatus", { contactId: message.contactId, to: State.contacts.currentContact?.name })
             }
         })
-        socket.on("server onlines", (contacts) => {
-            setOnlines(contacts)
+        socket.on("server onlines", (onlines) => {
+            dispatch({ type: ContactsTypes.SET_ONLINES, payload: onlines})
         })
-        socket.on("server updateMessage", (data) => {
-            dispatch({ type: MessagesTypes.UPDATE_MESSAGE_FRONT, payload: { contactId: data.contactId, currentContactId: currentContact.contactId }})
+        socket.on("server updateMessageStatus", (data) => {
+            dispatch({ type: MessagesTypes.UPDATE_MESSAGE_FRONT, payload: { contactId: data.contactId, currentContactId: State.contacts.currentContact?.contactId }})
         })
-    }, [socket, currentContact])
+    }, [socket, State.contacts.currentContact])
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            if (currentContact.name){
-                if (currentContact.name in onlines){
-                    dispatch({ type: ContactsTypes.SET_CURRENTCONTACT_STATUS, payload: { online: true }})
-                } else {
-                    dispatch({ type: ContactsTypes.SET_CURRENTCONTACT_STATUS, payload: { online: false }})
-                }
-            }
-        }, 3000)
-
-        return () => {
-            clearInterval(interval)
-        }
-    }, [onlines, currentContact])
-
-    function sendMessage(){
-        if (message != "" && currentContact?.contactId != ""){
-            document.getElementById(style.messages)?.scrollTo(0, document.getElementById(style.messages)!.scrollHeight + 1000)
-            dispatch({ type: MessagesTypes.MESSAGE_REQUEST, payload: { message: { message, fromId: user?.id, contactId: currentContact?.contactId, already: true } }})
-            socket.emit("message", { message, to: currentContact?.name, fromId: user?.id, contactId: currentContact?.contactId })
-            dispatch({ type: MessagesTypes.ADD_REQUEST, payload: { message, contactId: currentContact?.contactId } })
-            setMessage("")
-        }
-    }
-
-    //console.log(currentContact)
+    console.log(State)
 
     return(
         <>
             {
                 user ?
-                    <>
                     <div id={style.content}>
                         <div id={style.left}>
                             <Header/>
-                            <div id={style.contacts}>
-                                <div id={style.searchAdd}>
-                                    <input type="text" placeholder="Contact Name" onChange={(e) => { 
-                                        dispatch({ type: ContactsTypes.FILTER_REQUEST, payload: { name: e.target.value, userId: user.id }})
-                                    }}/>
-                                    <AiOutlineUserAdd onClick={() => document.getElementById(styleMenu.local)?.classList.toggle(styleMenu.activeMenu)}/>
-                                </div>
-                                {
-                                    State.contacts.search[0] ?
-                                        State.contacts.search.map(contact => <Contact contact={contact}/>)
-                                    :
-                                        <></>
-                                }
-                            </div>
+                            <Contacts/>
                         </div>
                         <AddContact/>
                         <main id={style.main}>
-                            <div id={style.chat}>
-                                {
-                                    currentContact.contactId ?
-                                        <>
-                                            <div id={style.contactHeader}>
-                                                <div id={style.contactLocal}>
-                                                    <div id={style.div}>
-                                                        <p>{currentContact.name}</p>
-                                                        <p>{currentContact.online ? "online" : ""}</p>
-                                                    </div>
-                                                    
-                                                    <div id={style.contactImage}>
-                                                        <img src={currentContact.profile_image} onError={(e) => e.currentTarget.src = ProfileImage}/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div id={style.messages}>
-                                                {
-                                                    State.messages.chat.map(message => <Message message={message}></Message>)
-                                                }
-                                            </div>
-                                            <div id={style.sendMessage}>
-                                                <input type="text" value={message} onChange={(e) => setMessage(e.target.value)} onKeyUp={(key) => {
-                                                    if (key.key == "Enter"){
-                                                        sendMessage()
-                                                    }
-                                                }}/>
-                                                <button onClick={sendMessage}>send</button>
-                                            </div>
-                                        </>
-                                    :
-                                        <></>
-                                }
-                            </div>
+                            {
+                                State.contacts.currentContact ?
+                                    <Chat/>
+                                :
+                                null
+                            }
                         </main>
                     </div>
-                    </>
                 :
-                    <></>
+                    null
             }
         </>
     )

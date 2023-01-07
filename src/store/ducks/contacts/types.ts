@@ -12,7 +12,7 @@ export enum ContactsTypes{
     "FILTER_REQUEST" = "@Contacts/FILTER_REQUEST",
 
     "SET_CURRENTCONTACT" = "@Contacts/SET_CURRENTCONTACT",
-    "SET_CURRENTCONTACT_STATUS" = "@Contacts/SET_CURRENTCONTACT_STATUS"
+    "SET_ONLINES" = "@Contacts/SET_ONLINES",
 }
 
 export type Payload = {
@@ -39,13 +39,21 @@ export type Contact = {
         name: string
         profile_image: string
     }
-    online: boolean
+}
+
+export interface CurrentContact extends Pick<User, "name"|"profile_image"> {
+    contactId: string
+}
+
+export type Online = {
+    [key: string]: string
 }
 
 export interface ContactsState{
     readonly data: Contact[]
     readonly search: Contact[]
-    readonly currentContact: Contact | null
+    readonly currentContact: CurrentContact | null
+    readonly onlines: Online | null
     readonly loading: boolean
     readonly error: boolean
 }

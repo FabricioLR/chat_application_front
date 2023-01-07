@@ -18,7 +18,7 @@ async function getContacts(){
     })
 }
 
-async function addContact(payload: Omit<Payload, "setLoad"|"userId">){
+async function addContact(payload: Pick<Payload, "name">){
     return await api.post("/AddContact", {
         name: payload.name,
     }, {

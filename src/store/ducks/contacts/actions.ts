@@ -1,5 +1,5 @@
 import { action } from "typesafe-actions";
-import { Contact, ContactsTypes, Payload } from "./types"
+import { Contact, ContactsTypes, Online, Payload } from "./types"
 
 export const loadRequest = () => action(ContactsTypes.LOAD_REQUEST)
 export const loadSuccess = (data: Contact[]) => action(ContactsTypes.LOAD_SUCCESS, { data })
@@ -13,4 +13,4 @@ export const filterRequest = (payload: Pick<Payload, "name"|"userId">) => action
 
 export const setCurrentContact = (payload: Pick<Payload, "name"|"profile_image"|"contactId"|"online">) => action(ContactsTypes.SET_CURRENTCONTACT, { payload })
 
-export const setCurrentContactStatus = (payload: Pick<Payload, "online">) => action(ContactsTypes.SET_CURRENTCONTACT_STATUS, { payload })
+export const setOnlines = (payload: Online) => action(ContactsTypes.SET_ONLINES, { payload })
